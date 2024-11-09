@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import emailjs from 'emailjs-com';
 
 export default function Form() {
   const [fields, setFields] = useState([{ id: 1, value: '' }]); // Initial field
@@ -7,8 +8,6 @@ export default function Form() {
   const [name, setName] = useState(''); // State to store the name
   const [email, setEmail] = useState(''); // State to store the email
   const [ingredients, setIngredients] = useState([]);
-
-  const testData = [{name: 'Pizza', price: 500}, {name: 'Mac and cheese', price: 2.50}]
   
   
   const addField = () => {
@@ -21,6 +20,20 @@ export default function Form() {
     );
     setFields(updatedFields);
   };
+
+  const handlePrintClick = () =>{
+    const ingredientsText = ingredients.map(ingredients => `${ingredients.name}: $${ingredients.price.toFixed(2)}`).join('\n');
+
+    const templatePrams = {
+      user_email: email,
+      ingredients_list: ingredientsText,
+    };
+    emailjs.send("service_adfk885","template_nsc4jaa",{
+      to_name: templatePrams.user_email,
+      message: templatePrams.ingredients_list
+      });
+
+  }
 
   const handleFindIngredientsClick = async () => {
     // Set the first item's value as the item name for the new form
@@ -120,9 +133,11 @@ export default function Form() {
                 Go Back
               </button>
             </div>
-            <div className="button-wrapper"> {/*onClick-{()=> event that put all ingreditent to email}*/}
+            <div className="button-wrapper"> 
               <button type="button" 
-              className="sending-button">
+              className="sending-button"
+              onClick={()=> handlePrintClick}
+              >
                 Print Ingredients
               </button>
             </div>
