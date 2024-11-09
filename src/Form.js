@@ -24,15 +24,20 @@ export default function Form() {
   const handlePrintClick = () =>{
     const ingredientsText = ingredients.map(ingredients => `${ingredients.name}: $${ingredients.price.toFixed(2)}`).join('\n');
 
-    const templatePrams = {
+    const templateParams = {
+      user_name: name,
       user_email: email,
       ingredients_list: ingredientsText,
     };
-    emailjs.send("service_adfk885","template_nsc4jaa",{
-      to_name: templatePrams.user_email,
-      message: templatePrams.ingredients_list
-      });
-
+    emailjs.send("service_adfk885","template_nsc4jaa", templateParams, 'B9O6gWh7xb9ZfsCxH')
+    .then(response => {
+      console.log('Email sent successfully!', response.status, response.text);
+    })
+    .catch(error => {
+      console.error('Error sending email:', error);
+    });
+      setShowNewForm(false); // Show the new form
+      
   }
 
   const handleFindIngredientsClick = async () => {
@@ -136,7 +141,7 @@ export default function Form() {
             <div className="button-wrapper"> 
               <button type="button" 
               className="sending-button"
-              onClick={()=> handlePrintClick}
+              onClick={handlePrintClick}
               >
                 Print Ingredients
               </button>
