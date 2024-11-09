@@ -37,7 +37,7 @@ export default function Form() {
       console.error('Error sending email:', error);
     });
       setShowNewForm(false); // Show the new form
-      
+
   }
 
   const handleFindIngredientsClick = async () => {
@@ -46,17 +46,17 @@ export default function Form() {
     setItemName(firstItemValue); // Store the item name
     setShowNewForm(true); // Show the new form
     try {
-      const response = await fetch(`${process.env.PUBLIC_URL}/ingredients.txt`);
-      const text = await response.text();
-      
-      // Process each line and split into objects
-      const lines = text.split('\n').filter(line => line.trim() !== '');
-      const ingredientsArray = lines.map(line => {
-        const [name, price] = line.split(','); // Assuming name and price are separated by a comma
-        return { name: name.trim(), price: parseFloat(price.trim()) };
-      });
-      
-      setIngredients(ingredientsArray);
+      const response = await fetch("http://127.0.0.1:8000:/run-scraper",{
+        method:"POST",
+        headers:{
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          itemName,
+        })
+      })
+      const data = await response.json();
+      setEmail(data);
     } catch (error) {
       console.error('Error fetching ingredients:', error);
     }
@@ -88,7 +88,7 @@ export default function Form() {
               <label>
                 Item:
                 <input
-                  type="text"
+                  type="Item"
                   value={field.value}
                   onChange={(e) => handleInputChange(field.id, e)}
                 />
