@@ -68,7 +68,7 @@ export default function Form() {
       {!showNewForm ? (
         // The initial form
         <form className="form-content">
-          <h2>Recepie Finder</h2>
+          <h2>Ingredient Finder</h2>
           <div className="form-field">
             <label>
               Name:
