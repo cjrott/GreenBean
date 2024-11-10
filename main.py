@@ -5,11 +5,10 @@ import os
 import traceback  # Ensure traceback is imported for detailed error logging
 
 app = FastAPI()
-class ItemRequest(BaseModle):
-    item: str
+#lass ItemRequest():
 @app.post("/run-scraper")
-async def run_scraper(request:ItemRequest):
-    item_name = request.item
+async def run_scraper():
+
     try:
         # Get the absolute path to the 'scraper' directory
         scraper_path = os.path.join(os.getcwd(), 'amazonscraper', 'amazonscraper')  # Adjust if necessary
