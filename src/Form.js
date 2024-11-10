@@ -46,7 +46,7 @@ export default function Form() {
     setItemName(firstItemValue); // Store the item name
     setShowNewForm(true); // Show the new form
     try {
-      const response = await fetch("http://localhost:8050/run-scraper",{
+      const response = await fetch("http://localhost:8000/run-scraper",{
         method:"POST",
         headers:{
           "Content-Type": "application/json",
