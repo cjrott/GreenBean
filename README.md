@@ -1,3 +1,11 @@
+steps to run
+install npm
+pip install FASTAPI
+Download Docker run on port 8050
+run webiste locally cant run throgh github
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
