@@ -8,11 +8,6 @@ export default function Form() {
   const [name, setName] = useState(''); // State to store the name
   const [email, setEmail] = useState(''); // State to store the email
   const [ingredients, setIngredients] = useState([]);
-  
-  
-  //const addField = () => {
-  // setFields([...fields, { id: fields.length + 1, value: '' }]);
-  //};
 
   const handleInputChange = (id, event) => {
     const updatedFields = fields.map((field) =>
@@ -23,7 +18,7 @@ export default function Form() {
 
   const handlePrintClick = () =>{
     const ingredientsText = ingredients
-    .map(ingredient => `${ingredient.name}: $${ingredient.price.toFixed(2)}`)  // Now price is guaranteed to be numeric
+    .map(ingredient => `${ingredient.name}: $${ingredient.price.toFixed(2)}`) 
     .join('\n');
 
   const templateParams = {
@@ -31,23 +26,21 @@ export default function Form() {
     user_email: email,
     ingredients_list: ingredientsText,
   };
-  console.log('Email:', email);
-  emailjs.send("service_ak1e34c", "template_nsc4jaa", templateParams, 'B9O6gWh7xb9ZfsCxH')
-    .then(response => {
-      console.log('Email sent successfully!', response.status, response.text);
-    })
-    .catch(error => {
-      console.error('Error sending email:', error);
-    });
+  //console.log('Email:', email);
+  //emailjs.send("service_ak1e34c", "template_nsc4jaa", templateParams, 'B9O6gWh7xb9ZfsCxH')
+    //.then(response => {
+      //console.log('Email sent successfully!', response.status, response.text);
+   // })
+   // .catch(error => {
+    //  console.error('Error sending email:', error);
+   // });
 
-  setShowNewForm(false); // Show the new form
+  setShowNewForm(false); 
 };
 
   const handleFindIngredientsClick = async () => {
-    const firstItemValue = fields[0]?.value || ''; // Use first item's value or empty string if no value
-    setItemName(firstItemValue); // Store the item name
-     // Show the new form
-  
+    const firstItemValue = fields[0]?.value || ''; 
+    setItemName(firstItemValue); 
     try {
       const response = await fetch("http://127.0.0.1:8000/run-scraper", {
         method: "POST",
@@ -60,35 +53,31 @@ export default function Form() {
       });
   
       const data = await response.json();
-      console.log(data);  // Log the response to check its structure
+      console.log(data); 
       if (Array.isArray(data.filtered_items)) {
-        // Map ingredients and convert price to number
         const updatedIngredients = data.filtered_items.map(ingredient => {
           console.log(ingredient)
           const price = parseFloat(ingredient.price?.replace?.('$', '').trim() ?? ingredient.price);  // Remove '$' and convert to number
           return {
             ...ingredient,
-            price: !isNaN(price) ? price : 0,  // Default to 0 if conversion fails
+            price: !isNaN(price) ? price : 0, 
           };
         });
         setIngredients(updatedIngredients);
       } else {
-        setIngredients(["word","col"]); // Set it to an empty array if it's not valid
+        setIngredients(["word","col"]); 
       }
     } catch (error) {
       console.error('Error fetching ingredients:', error);
       setIngredients([]);
-       // Reset ingredients in case of an error
     }
     setShowNewForm(true);
   };
   
 
   return (
-    
     <div className="form-container">
       {!showNewForm ? (
-        // The initial form
         <form className="form-content">
           <h2>Ingredient Finder</h2>
           <div className="form-field">
@@ -111,7 +100,7 @@ export default function Form() {
                 Item:
                 <input
                   type="Item"
-                  value={field.value}
+                  value={"Green Bean Casserole"}
                   onChange={(e) => handleInputChange(field.id, e)}
                 />
               </label>
@@ -131,15 +120,12 @@ export default function Form() {
           </div>
         </form>
       ) : (
-        // The new form to show after button press
-        
         <form className="form-content">
-          {/* Box displaying Name and Email */}
           <div className="info-box">
               <p><strong>Name:</strong> {name}</p>
               <p><strong>Email:</strong> {email}</p>
           </div>
-          <h2>{itemName}</h2> {/* Display the item name here */}
+          <h2>{itemName}</h2> 
           <div className="form-field">
             <label>
               Ingredients:
@@ -147,8 +133,8 @@ export default function Form() {
               {ingredients && Array.isArray(ingredients) && ingredients.length > 0 ? (
                 ingredients.map((ingredient, index) => (
                   <div key={index} className="ingredient-item">
-                    <span>{ingredient.name}</span>  {/* Item Name */}
-                    <span>${ingredient.price.toFixed(2)}</span>  {/* Item Price */}
+                    <span>{ingredient.name}</span>  
+                    <span>${ingredient.price.toFixed(2)}</span> 
                   </div>
                 ))
               ) : (
