@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/GreenBean/static/css/main.7df436c1.css",
-    "main.js": "/GreenBean/static/js/main.d5d0076f.js",
+    "main.js": "/GreenBean/static/js/main.a9367d17.js",
     "static/js/453.a98902f7.chunk.js": "/GreenBean/static/js/453.a98902f7.chunk.js",
     "index.html": "/GreenBean/index.html",
     "main.7df436c1.css.map": "/GreenBean/static/css/main.7df436c1.css.map",
-    "main.d5d0076f.js.map": "/GreenBean/static/js/main.d5d0076f.js.map",
+    "main.a9367d17.js.map": "/GreenBean/static/js/main.a9367d17.js.map",
     "453.a98902f7.chunk.js.map": "/GreenBean/static/js/453.a98902f7.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.7df436c1.css",
-    "static/js/main.d5d0076f.js"
+    "static/js/main.a9367d17.js"
   ]
 }
