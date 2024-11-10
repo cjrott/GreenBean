@@ -96,3 +96,19 @@ input {
 .info-box p {
   margin: 5px 0;
 }
+
+.ingredient-list {
+  display: flex;
+  flex-direction: column; /* Stack vertically */
+}
+
+.ingredient-item {
+  display: flex;
+  justify-content: space-between; /* Space between name and price */
+  margin-bottom: 8px; /* Add space between each ingredient */
+}
+
+.ingredient-item span {
+  width: 50%; /* Ensure each part (name, price) takes up half the space */
+  text-align: left;
+}

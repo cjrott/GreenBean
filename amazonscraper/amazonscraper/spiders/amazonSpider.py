@@ -5,8 +5,7 @@ class AmazonSpider(scrapy.Spider):
     name = 'peter'
     
     def start_requests(self):
-        url = 'https://www.amazon.com/s?k=groceries&ref=nb_sb_noss_1'
-        url2 = 'https://www.amazon.com/s?k=canned+goods&crid=1S5XPRPNRO8MK&sprefix=canned+goods%2Caps%2C115&ref=nb_sb_noss_2'
+        url = 'https://www.amazon.com/s?k=green+bean+casserole&crid=2DNSS4TCDH0VU&sprefix=green+bean+cas%2Caps%2C109&ref=nb_sb_ss_ts-doa-p_1_14'
         yield SplashRequest(url=url, callback=self.parse)
 
     def parse(self, response):

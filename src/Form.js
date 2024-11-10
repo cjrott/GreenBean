@@ -10,9 +10,9 @@ export default function Form() {
   const [ingredients, setIngredients] = useState([]);
   
   
-  const addField = () => {
-    setFields([...fields, { id: fields.length + 1, value: '' }]);
-  };
+  //const addField = () => {
+  // setFields([...fields, { id: fields.length + 1, value: '' }]);
+  //};
 
   const handleInputChange = (id, event) => {
     const updatedFields = fields.map((field) =>
@@ -22,45 +22,67 @@ export default function Form() {
   };
 
   const handlePrintClick = () =>{
-    const ingredientsText = ingredients.map(ingredients => `${ingredients.name}: $${ingredients.price.toFixed(2)}`).join('\n');
+    const ingredientsText = ingredients
+    .map(ingredient => `${ingredient.name}: $${ingredient.price.toFixed(2)}`)  // Now price is guaranteed to be numeric
+    .join('\n');
 
-    const templateParams = {
-      user_name: name,
-      user_email: email,
-      ingredients_list: ingredientsText,
-    };
-    emailjs.send("service_adfk885","template_nsc4jaa", templateParams, 'B9O6gWh7xb9ZfsCxH')
+  const templateParams = {
+    user_name: name,
+    user_email: email,
+    ingredients_list: ingredientsText,
+  };
+  console.log('Email:', email);
+  emailjs.send("service_ak1e34c", "template_nsc4jaa", templateParams, 'B9O6gWh7xb9ZfsCxH')
     .then(response => {
       console.log('Email sent successfully!', response.status, response.text);
     })
     .catch(error => {
       console.error('Error sending email:', error);
     });
-      setShowNewForm(false); // Show the new form
 
-  }
+  setShowNewForm(false); // Show the new form
+};
 
   const handleFindIngredientsClick = async () => {
-    // Set the first item's value as the item name for the new form
     const firstItemValue = fields[0]?.value || ''; // Use first item's value or empty string if no value
     setItemName(firstItemValue); // Store the item name
-    setShowNewForm(true); // Show the new form
+     // Show the new form
+  
     try {
-      const response = await fetch("http://localhost:8000/run-scraper",{
-        method:"POST",
-        headers:{
+      const response = await fetch("http://127.0.0.1:8000/run-scraper", {
+        method: "POST",
+        headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          itemName,
-        })
-      })
+          itemName: firstItemValue,
+        }),
+      });
+  
       const data = await response.json();
-      setEmail(data);
+      console.log(data);  // Log the response to check its structure
+      if (Array.isArray(data.filtered_items)) {
+        // Map ingredients and convert price to number
+        const updatedIngredients = data.filtered_items.map(ingredient => {
+          console.log(ingredient)
+          const price = parseFloat(ingredient.price?.replace?.('$', '').trim() ?? ingredient.price);  // Remove '$' and convert to number
+          return {
+            ...ingredient,
+            price: !isNaN(price) ? price : 0,  // Default to 0 if conversion fails
+          };
+        });
+        setIngredients(updatedIngredients);
+      } else {
+        setIngredients(["word","col"]); // Set it to an empty array if it's not valid
+      }
     } catch (error) {
       console.error('Error fetching ingredients:', error);
+      setIngredients([]);
+       // Reset ingredients in case of an error
     }
+    setShowNewForm(true);
   };
+  
 
   return (
     
@@ -121,14 +143,18 @@ export default function Form() {
           <div className="form-field">
             <label>
               Ingredients:
-              <ul>
-              {ingredients.map((ingredient, index) => (
-              <li key={index}>
-              {ingredient.name} - ${ingredient.price.toFixed(2)}
-               </li>
-               ))}
-              </ul>
-              {/* <input type="text" name="newInfo" /> */}
+              <div className="ingredient-list">
+              {ingredients && Array.isArray(ingredients) && ingredients.length > 0 ? (
+                ingredients.map((ingredient, index) => (
+                  <div key={index} className="ingredient-item">
+                    <span>{ingredient.name}</span>  {/* Item Name */}
+                    <span>${ingredient.price.toFixed(2)}</span>  {/* Item Price */}
+                  </div>
+                ))
+              ) : (
+                <div>No ingredients found</div>
+              )}
+            </div>
             </label>
           </div>
           
@@ -138,6 +164,7 @@ export default function Form() {
                 Go Back
               </button>
             </div>
+            {/*
             <div className="button-wrapper"> 
               <button type="button" 
               className="sending-button"
@@ -146,6 +173,7 @@ export default function Form() {
                 Print Ingredients
               </button>
             </div>
+            */} 
           </div>
         </form>
       )}
